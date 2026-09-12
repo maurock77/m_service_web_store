@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Educa ara Todos</title>
+        <title>Educa Para Todos</title>
         <!-- bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     </head>
@@ -212,11 +212,11 @@ unicode: "eb54"
                     </div>
                 </div>
             </section>
-
-
-
         </main>
 
+        <footer class="footer">
+            <p class="footer__texto">EducaParaTodos - Todos los derechos reservados 2026.</p>
+        </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
