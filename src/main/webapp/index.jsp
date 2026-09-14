@@ -29,7 +29,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                        <a class="navbar-brand" href="#">
+                        <a class="navbar-brand" href="index.jsp">
                             <img src="img/educaParaTodos.png" alt="logo m_service" width="140" height="auto">
                         </a>
 
@@ -38,7 +38,7 @@
                                 <a class="nav-link active" aria-current="page" href="#">Cursos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Mi perfil</a>
+                                <a class="nav-link" href="miPerfil.jsp">Mi perfil</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Contacto</a>
