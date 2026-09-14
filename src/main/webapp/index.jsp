@@ -56,10 +56,10 @@
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="10000">
-                        <img src="img/hero.webp" class="d-block w-100" alt="...">
+                        <img src="img/hero.webp" class="d-block w-100 vh-100" style="object-fit: cover;" alt="hero">
                     </div>
                     <div class="carousel-item" data-bs-interval="2000">
-                        <img src="img/hero2.webp" class="d-block w-100" alt="...">
+                        <img src="img/hero2.webp" class="d-block w-100 vh-100" style="object-fit: cover;" alt="hero2">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">

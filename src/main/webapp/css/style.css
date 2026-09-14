@@ -10,6 +10,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 :root {
     --blanco: #FFF;
     --negro: #000;
+    --gris: #CFCFCF;
 }
 
 html {
@@ -43,6 +44,7 @@ img, video {
 
 /*footer*/
 .footer {
+    background-color: var(--gris);
     padding: 1rem 0;
     margin-top: 2rem;
 }
