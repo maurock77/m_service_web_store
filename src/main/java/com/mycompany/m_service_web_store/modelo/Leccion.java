@@ -10,4 +10,21 @@ package com.mycompany.m_service_web_store.modelo;
  */
 public class Leccion {
     
+    private int id;
+    private int cursoId;
+    private String titulo;
+    private String contenido;
+    private int orden;
+
+    // constructores
+    public Leccion() {
+}
+
+    public Leccion(int id, int cursoId,String titulo, String contenido, int orden) {
+    this.id = id;
+    this.cursoId = cursoId;
+    this.titulo = titulo;
+    this.contenido = contenido;
+    this.orden = orden;
+}
 }
