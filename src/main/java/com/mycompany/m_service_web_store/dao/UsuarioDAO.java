@@ -4,6 +4,13 @@
  */
 package com.mycompany.m_service_web_store.dao;
 
+import com.mycompany.m_service_web_store.modelo.Usuario;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
+import java.util.List;
+
 /**
  *
  * @author mauricio
