@@ -27,4 +27,51 @@ public class Leccion {
     this.contenido = contenido;
     this.orden = orden;
 }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCursoId() {
+        return cursoId;
+    }
+
+    public void setCursoId(int cursoId) {
+        this.cursoId = cursoId;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public int getOrden() {
+        return orden;
+    }
+
+    public void setOrden(int orden) {
+        this.orden = orden;
+    }
+
+    @Override
+    public String toString() {
+        return "Leccion{" + "id=" + id + ", cursoId=" + cursoId + ", titulo=" + titulo + ", contenido=" + contenido + ", orden=" + orden + '}';
+    }
+    
+    
 }
