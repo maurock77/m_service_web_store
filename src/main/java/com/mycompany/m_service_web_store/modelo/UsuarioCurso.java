@@ -41,7 +41,7 @@ public class UsuarioCurso implements Serializable {
         this.usuario = usuario;
         this.curso = curso;
         this.fechaInscripcion = fechaInscripcion;
-        this.id = new UsuarioCursoId(usuario.getId())
+        this.id = new UsuarioCursoId(usuario.getId(), curso.getId());
     }
 
     public UsuarioCursoId getId() {
