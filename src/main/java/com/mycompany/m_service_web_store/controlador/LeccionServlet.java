@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author mauricio
  */
-@WebServlet(name = "ActualizarPerfilServlet", urlPatterns = {"/ActualizarPerfilServlet"})
-public class ActualizarPerfilServlet extends HttpServlet {
+@WebServlet(name = "LeccionServlet", urlPatterns = {"/LeccionServlet"})
+public class LeccionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +36,10 @@ public class ActualizarPerfilServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ActualizarPerfilServlet</title>");
+            out.println("<title>Servlet LeccionServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ActualizarPerfilServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LeccionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

@@ -61,7 +61,7 @@ public class CursoDAO {
     }
     
     /**
-     * Busca cursos por nombre}
+     * Busca cursos por nombre
      * 
      * @param nombre nombre del curso
      * @return lista de cursos que coinciden con el nombre
