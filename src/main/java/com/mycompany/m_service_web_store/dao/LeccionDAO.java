@@ -5,9 +5,9 @@
 package com.mycompany.m_service_web_store.dao;
 
 import com.mycompany.m_service_web_store.modelo.Leccion;
+import com.mycompany.m_service_web_store.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
@@ -19,15 +19,8 @@ import java.util.List;
  */
 public class LeccionDAO {
 
-    private EntityManagerFactory emf;
+    private static final EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
-    /**
-     * Constructor que inicializa el EntityManagerFactory usando la unidad de
-     * persistencia definida en persistence.xml.
-     */
-    public LeccionDAO() {
-        this.emf = Persistence.createEntityManagerFactory("my_persistence_unit");
-    }
 
     /**
      * Inserta una nueva lección en la base de datos
@@ -40,9 +33,12 @@ public class LeccionDAO {
             em.getTransaction().begin();
             em.persist(leccion);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
-        }
+    }
     }
 
     /**
@@ -69,7 +65,7 @@ public class LeccionDAO {
     public List<Leccion> findByCursoId(int cursoId) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Leccion> query = em.createQuery("SELECT l FROM leccion WHERE l.cursoId = :cursoId ORDER BY l.orden", Leccion.class);
+            TypedQuery<Leccion> query = em.createQuery("SELECT l FROM Leccion WHERE l.curso.id = :cursoId", Leccion.class);
             query.setParameter("cursoId", cursoId);
             return query.getResultList();
         } finally {
@@ -85,8 +81,7 @@ public class LeccionDAO {
     public List<Leccion> findAll() {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Leccion> query = em.createQuery("SELECT l FROM Leccion l", Leccion.class);
-            return query.getResultList();
+            return em.createQuery("SELECT l FROM Leccion l", Leccion.class). getResultList();
         } finally {
             em.close();
         }
@@ -103,6 +98,9 @@ public class LeccionDAO {
             em.getTransaction().begin();
             em.merge(leccion);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -122,6 +120,9 @@ public class LeccionDAO {
                 em.remove(leccion);
             }
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }

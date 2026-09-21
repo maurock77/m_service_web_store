@@ -6,6 +6,7 @@ package com.mycompany.m_service_web_store.dao;
 
 import com.mycompany.m_service_web_store.modelo.UsuarioCurso;
 import com.mycompany.m_service_web_store.modelo.UsuarioCursoId;
+import com.mycompany.m_service_web_store.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -26,15 +27,8 @@ import java.util.List;
  */
 public class UsuarioCursoDAO {
     
-    private EntityManagerFactory emf;
-    
-    /**
-     * Constructor que inicializa el EntityManagerFactory
-     * usando la unidad de persistencia definida en persistence.xml.
-     */
-    public UsuarioCursoDAO() {
-        this.emf = Persistence.createEntityManagerFactory("my_persistence_unit");
-    }
+    private static final EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
+
     
     /**
      * insertar una nueva inscripción en la base de datos.
@@ -47,6 +41,9 @@ public class UsuarioCursoDAO {
             em.getTransaction().begin();
             em.persist(usuarioCurso);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -89,12 +86,29 @@ public class UsuarioCursoDAO {
     public void eliminar(UsuarioCursoId id) {
         EntityManager em = emf.createEntityManager();
         try {
-            UsuarioCurso uc = em.find(UsuarioCurso.class, id);
-            if (uc != null) {
-                em.getTransaction().begin();
-                em.remove(uc);
-                em.getTransaction().commit();
+            UsuarioCurso usuarioCurso = em.find(UsuarioCurso.class, id);
+            if (usuarioCurso != null) {
+                em.remove(usuarioCurso);
             }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+    
+    /**
+     * Lista todas las inscripciones de un usuario concreto.
+     */
+    public List<UsuarioCurso> listarPorUsuario(int usuarioId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<UsuarioCurso> query = em.createQuery(
+            "SELECT uc FROM UsuarioCurso uc WHERE uc.usuario.id = :usuarioId", UsuarioCurso.class);
+            query.setParameter("usuarioId", usuarioId);
+            return query.getResultList();
         } finally {
             em.close();
         }

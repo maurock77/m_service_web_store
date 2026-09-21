@@ -5,33 +5,25 @@
 package com.mycompany.m_service_web_store.dao;
 
 import com.mycompany.m_service_web_store.modelo.Curso;
+import com.mycompany.m_service_web_store.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * DAO para entidad {@link Curso}.
- * encapsula las operaciones CRUD y consultas específicas
- * usando JPA y JPQL.
+ * DAO para entidad {@link Curso}. encapsula las operaciones CRUD y consultas
+ * específicas usando JPA y JPQL.
+ *
  * @author mauricio
  */
 public class CursoDAO {
-    
-    private EntityManagerFactory emf;
-    
-    /**
-     * Constructor que inicializa el EntityManagerFactory
-     * usando la unidad de persistencia definida en persistence.xml.
-     */
-    public CursoDAO() {
-        this.emf = Persistence.createEntityManagerFactory("my_persistence_unit");
-    }
-    
+
+    private static final EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
+
     /**
      * Inserta un nuevo curso en la base de datos.
-     * 
+     *
      * @param curso objeto Curso a persistir
      */
     public void insert(Curso curso) {
@@ -40,14 +32,17 @@ public class CursoDAO {
             em.getTransaction().begin();
             em.persist(curso);
             em.getTransaction().commit();
-        } finally {
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) 
+                em.getTransaction().rollback();
+            }finally {
             em.close();
+        } 
         }
-    }
-    
+
     /**
      * Busca un curso por su ID
-     * 
+     *
      * @param id identificador del curso
      * @return el objeto Curso encontrado o null si no existe
      */
@@ -59,10 +54,10 @@ public class CursoDAO {
             em.close();
         }
     }
-    
+
     /**
      * Busca cursos por nombre
-     * 
+     *
      * @param nombre nombre del curso
      * @return lista de cursos que coinciden con el nombre
      */
@@ -70,32 +65,31 @@ public class CursoDAO {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Curso> query = em.createQuery(
-            "SELECT c FROM Curso c WHERE c.nombre = :nombre", Curso.class);
-            query.setParameter("nombre", nombre);
+                    "SELECT c FROM Curso c WHERE c.nombre = :nombre", Curso.class);
+            query.setParameter("nombre", "%" + nombre + "%");
             return query.getResultList();
         } finally {
             em.close();
         }
     }
-    
+
     /**
      * Obtiene todos los cursos registrados en la base de datos.
-     * 
+     *
      * @return lista de objetos Curso
      */
     public List<Curso> findAll() {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Curso> query = em.createQuery("SELECT c FROM Curso c", Curso.class);
-            return query.getResultList();
+            return em.createQuery("SELECT c FROM Curso c", Curso.class).getResultList();
         } finally {
             em.close();
         }
     }
-    
+
     /**
      * Actualiza los datos de un curso existente.
-     * 
+     *
      * @param curso objeto Curso con los datos actualizados
      */
     public void update(Curso curso) {
@@ -104,11 +98,17 @@ public class CursoDAO {
             em.getTransaction().begin();
             em.merge(curso);
             em.getTransaction().commit();
-        } finally {
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) 
+                em.getTransaction().rollback();
+                throw e;
+            } finally {
             em.close();
+        } 
         }
-    }
+
     
+
     public void delete(int id) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -118,9 +118,13 @@ public class CursoDAO {
                 em.remove(curso);
             }
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) 
+                em.getTransaction().rollback();
+                throw e;
         } finally {
-            em.close();
-        }
+                em.close();
+                }
     }
-    
+
 }

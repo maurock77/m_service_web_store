@@ -5,9 +5,9 @@
 package com.mycompany.m_service_web_store.dao;
 
 import com.mycompany.m_service_web_store.modelo.Usuario;
+import com.mycompany.m_service_web_store.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
@@ -20,15 +20,7 @@ import java.util.List;
  */
 public class UsuarioDAO {
     
-    private EntityManagerFactory emf;
-    
-    /**
-     * Constructor que inicializa en EntityManagerFactory
-     * usando la unidad de persistencia definida en persistence.xml
-     */
-    public UsuarioDAO() {
-        this.emf = Persistence.createEntityManagerFactory("my_persistence_unit");
-    }
+    private static final EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
     
     /**
      * Inserta u nuevo usuario en la base de datos
@@ -41,6 +33,9 @@ public class UsuarioDAO {
             em.getTransaction().begin();
             em.persist(usuario);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -88,8 +83,7 @@ public class UsuarioDAO {
     public List<Usuario> findAll() {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Usuario> query = em.createQuery("SELECT u FROM u", Usuario.class);
-            return query.getResultList();
+            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
         } finally {
             em.close();
         }
@@ -106,6 +100,9 @@ public class UsuarioDAO {
             em.getTransaction().begin();
             em.merge(usuario);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -125,6 +122,9 @@ public class UsuarioDAO {
                 em.remove(usuario);
             }
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         } finally {
             em.close();
         }
