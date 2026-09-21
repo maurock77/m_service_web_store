@@ -4,6 +4,9 @@
  */
 package com.mycompany.m_service_web_store.controlador;
 
+import com.mycompany.m_service_web_store.dao.UsuarioDAO;
+import com.mycompany.m_service_web_store.modelo.Usuario;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -18,6 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
 public class UsuarioServlet extends HttpServlet {
+    
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +63,26 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String idParam = request.getParameter("id");
+        
+        if (idParam == null || idParam.isBlank()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Debe especificar in ID de usuario");
+            return;
+        }
+        try {
+            int id = Integer.parseInt(idParam);
+            Usuario usuario = usuarioDAO.findById(id);
+            if (usuario != null) {
+                request.setAttribute("usuario", usuario);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("miPerfil.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Usuario no encontrado");
+            }
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de usuario inválido");
+        }
     }
 
     /**
