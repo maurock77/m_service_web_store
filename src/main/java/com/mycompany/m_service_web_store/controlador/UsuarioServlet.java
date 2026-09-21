@@ -64,19 +64,29 @@ public class UsuarioServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String idParam = request.getParameter("id");
+        System.out.println(">>> idParam es null o vacío, enviando 400");
         
         if (idParam == null || idParam.isBlank()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Debe especificar in ID de usuario");
+            System.out.println(">>> idParam es null o vacío, enviando 400");
+            
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Debe especificar un ID de usuario");
             return;
         }
         try {
             int id = Integer.parseInt(idParam);
+            System.out.println(">>> Buscando usuario con id: " + id);
+            
             Usuario usuario = usuarioDAO.findById(id);
+            System.out.println(">>> Usuario encontrado: " + usuario);
+            
             if (usuario != null) {
                 request.setAttribute("usuario", usuario);
+                System.out.println(">>> Atributo 'usuario' establecido en request");
+                
                 RequestDispatcher dispatcher = request.getRequestDispatcher("miPerfil.jsp");
                 dispatcher.forward(request, response);
             } else {
+                System.out.println(">>> Usuairo no encontrado en BD");
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Usuario no encontrado");
             }
         } catch (NumberFormatException e) {
