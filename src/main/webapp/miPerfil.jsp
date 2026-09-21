@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="com.mycompany.m_service_web_store.modelo.Usuario" %>
+<% Usuario usuario = (Usuario) request.getAttribute("usuario"); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -53,12 +55,13 @@
                 </div>
             </nav>
         </header>
+        
         <div class="container my-5">
             <div class="row">
                 <div class="col-md-4 text-center">
                     <img src="resources/img/avatar.png" class="rounded-circle mb-3" width="150">
-                    <h4><%= nombre%></h4>
-                    <p><%= correo%></p>
+                    <h4><%= usuario.getNombre()%></h4>
+                    <p><%= usuario.getCorreo()%></p>
                     <button class="btn btn-secondary">Editar imagen</button>
                 </div>
 
@@ -66,11 +69,11 @@
                     <form action="ActualizarPerfil.jsp" method="post">
                         <div class="mb-3">
                             <label class="form-label">Nombre</label>
-                            <input type="text" name="nombre" class="form-control" value="<%= nombre%>">
+                            <input type="text" name="nombre" class="form-control" value="<%= usuario.getNombre()%>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Correo electrónico</label>
-                            <input type="email" name="correo" class="form-control" value="<%= correo%>">
+                            <input type="email" name="correo" class="form-control" value="<%= usuario.getCorreo()%>">
                         </div>
                         <button class="btn btn-primary">Actualizar</button>
                     </form>
@@ -80,5 +83,6 @@
         <main>
 
         </main>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
