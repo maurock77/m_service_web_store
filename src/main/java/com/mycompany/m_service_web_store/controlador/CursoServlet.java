@@ -4,6 +4,8 @@
  */
 package com.mycompany.m_service_web_store.controlador;
 
+import com.mycompany.m_service_web_store.dao.CursoDAO;
+import com.mycompany.m_service_web_store.modelo.Curso;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -18,6 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "CursoServlet", urlPatterns = {"/CursoServlet"})
 public class CursoServlet extends HttpServlet {
+    
+    private final CursoDAO cursoDAO = new CursoDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +62,39 @@ public class CursoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String servletPath = request.getServletPath();
+        String idParam = request.getParameter("id");
+        
+        if ("/cursos".equals(servletPath)) {
+            List<Curso> cursos = cursoDAO.findAll();
+            
+            request.setAttribute("cursos", cursos);
+            
+            requestDispatcher dispatcher = (requestDispatcher) request.getRequestDispatcher("cursos.jsp");
+            
+            dispatcher.forward(request, response);
+        } else if ("/curso".equals(servletPath) && idParam != null) {
+            try {
+                int id = Integer.parseInt(idParam);
+                
+                Curso curso = cursoDAO.findById(id);
+                
+                if (curso != null) {
+                    request.setAttribute("curso", curso);
+                    
+                    requestDispatcher dispatcher = (requestDispatcher) request.getRequestDispatcher("curso.jsp");
+                    
+                    dispatcher.forward(request, response);
+                } else {
+                    response.sendError (HttpServletResponse.SC_NOT_FOUND, "Curso no encontrado");
+                }
+            } catch (NumberFormatException e) {
+                response.sendError (HttpServletResponse.SC_BAD_REQUEST, "ID de curso inválido");
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ruta no válida");
+        }
     }
 
     /**
@@ -72,7 +109,7 @@ public class CursoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
+        }
 
     /**
      * Returns a short description of the servlet.
@@ -82,6 +119,16 @@ public class CursoServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
+
+    private static class requestDispatcher {
+
+        public requestDispatcher() {
+        }
+
+        private void forward(HttpServletRequest request, HttpServletResponse response) {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+    }
 
 }
