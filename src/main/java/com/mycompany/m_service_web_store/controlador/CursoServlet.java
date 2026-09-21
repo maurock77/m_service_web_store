@@ -6,6 +6,7 @@ package com.mycompany.m_service_web_store.controlador;
 
 import com.mycompany.m_service_web_store.dao.CursoDAO;
 import com.mycompany.m_service_web_store.modelo.Curso;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -63,38 +64,32 @@ public class CursoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String servletPath = request.getServletPath();
-        String idParam = request.getParameter("id");
+      String idParam = request.getParameter("id");
+      
+      if (idParam == null) {
+          // mostrar todos los cursos
+          List<Curso> cursos = cursoDAO.findAll();
+          request.setAttribute("cursos", cursos);
+          RequestDispatcher dispatcher = request.getRequestDispatcher("cursos.jsp");
+          dispatcher.forward(request, response);
+      } else {
+          // muestra detalle de un curso
+          try {
+              int id = Integer.parseInt(idParam);
+              Curso curso = cursoDAO.findById(id);
+              
+              if (curso != null) {
+                  request.setAttribute("curso", curso);
+                  RequestDispatcher dispatcher = request.getRequestDispatcher("curso.jsp");
+                  dispatcher.forward(request, response);
+              } else {
+                  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Curso no encontrado");
+              }
+          } catch (NumberFormatException e) {
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de curso inválido");
+          }
+      }
         
-        if ("/cursos".equals(servletPath)) {
-            List<Curso> cursos = cursoDAO.findAll();
-            
-            request.setAttribute("cursos", cursos);
-            
-            requestDispatcher dispatcher = (requestDispatcher) request.getRequestDispatcher("cursos.jsp");
-            
-            dispatcher.forward(request, response);
-        } else if ("/curso".equals(servletPath) && idParam != null) {
-            try {
-                int id = Integer.parseInt(idParam);
-                
-                Curso curso = cursoDAO.findById(id);
-                
-                if (curso != null) {
-                    request.setAttribute("curso", curso);
-                    
-                    requestDispatcher dispatcher = (requestDispatcher) request.getRequestDispatcher("curso.jsp");
-                    
-                    dispatcher.forward(request, response);
-                } else {
-                    response.sendError (HttpServletResponse.SC_NOT_FOUND, "Curso no encontrado");
-                }
-            } catch (NumberFormatException e) {
-                response.sendError (HttpServletResponse.SC_BAD_REQUEST, "ID de curso inválido");
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ruta no válida");
-        }
     }
 
     /**
