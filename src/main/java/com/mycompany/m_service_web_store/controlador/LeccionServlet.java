@@ -4,6 +4,9 @@
  */
 package com.mycompany.m_service_web_store.controlador;
 
+import com.mycompany.m_service_web_store.modelo.Leccion;
+import com.mycompany.m_service_web_store.dao.LeccionDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +14,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
- *
+ * Servlet encargado de gestionar las consultas relacionadas con las lecciones
  * @author mauricio
  */
 @WebServlet(name = "LeccionServlet", urlPatterns = {"/LeccionServlet"})
 public class LeccionServlet extends HttpServlet {
+    
+    private final LeccionDAO leccionDAO = new LeccionDAO();
+    private int id;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +64,53 @@ public class LeccionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String servletPath = request.getServletPath();
+        String idParam = request.getParameter("id");
+        String cursoIdParam = request.getParameter("cursoId");
+        
+        if ("/lecciones".equals(servletPath)) {
+            if (cursoIdParam != null) {
+                try {
+                    int cursoId = Integer.parseInt(cursoIdParam);
+                    
+                    List<Leccion> lecciones = leccionDAO.findByCursoId(cursoId);
+                    
+                    request.setAttribute("lecciones", lecciones);
+                    
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("lecciones.jsp");
+                    
+                    dispatcher.forward(request, response);
+                } catch (NumberFormatException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de curso inválido");
+                }
+            } else  {
+                List<Leccion> lecciones = leccionDAO.findAll();
+                request.setAttribute("lecciones", lecciones);
+                
+                RequestDispatcher dispatcher = request.getRequestDispatcher("lecciones.jsp");
+                dispatcher.forward(request, response);
+            }
+        } else if ("/leccion".equals(servletPath) && idParam != null) {
+            try {
+               int cursoId = Integer.parseInt(cursoIdParam);
+               Leccion leccion = leccionDAO.findById(id);
+               if (leccion != null) {
+                   request.setAttribute("leccion", leccion);
+                   RequestDispatcher dispatcher = request.getRequestDispatcher("lecciones.jsp");
+                dispatcher.forward(request, response);
+                   
+               } else {
+                  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Lección no encontrada");
+               }
+            } catch (NumberFormatException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de lección inválido");
+                }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Lección no encontrada");
+        }
+        
+        
     }
 
     /**
@@ -82,6 +135,6 @@ public class LeccionServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
+    
 }
