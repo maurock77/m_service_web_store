@@ -65,7 +65,7 @@ public class LeccionDAO {
     public List<Leccion> findByCursoId(int cursoId) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Leccion> query = em.createQuery("SELECT l FROM Leccion WHERE l.curso.id = :cursoId", Leccion.class);
+            TypedQuery<Leccion> query = em.createQuery("SELECT l FROM Leccion l WHERE l.curso.id = :cursoId", Leccion.class);
             query.setParameter("cursoId", cursoId);
             return query.getResultList();
         } finally {

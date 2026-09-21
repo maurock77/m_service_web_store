@@ -4,16 +4,36 @@
  */
 package com.mycompany.m_service_web_store.modelo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author mauricio
  */
+
+@Entity
+@Table(name = "leccion")
 public class Leccion {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @Column(name = "curso_id", nullable = false)
     private int cursoId;
+    
+    @Column(name = "titulo", nullable = false, length = 150)
     private String titulo;
+    
+    @Column(name = "contenido", columnDefinition = "TEXT")
     private String contenido;
+    
+    @Column(name = "orden")
     private int orden;
 
     // constructores

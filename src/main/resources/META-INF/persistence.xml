@@ -10,9 +10,11 @@
 
         <!--  Registra TODAS tus entidades aquí -->
         <class>com.mycompany.m_service_web_store.modelo.Usuario</class>
-        <!-- Añade aquí las demás entidades cuando las tengas:
-        <class>com.mycompany.m_service_web_store.modelo.Producto</class>
-        -->
+        <class>com.mycompany.m_service_web_store.modelo.Curso</class>
+        <class>com.mycompany.m_service_web_store.modelo.Leccion</class>
+        <class>com.mycompany.m_service_web_store.modelo.UsuarioCurso</class>
+        <class>com.mycompany.m_service_web_store.modelo.UsuarioCursoId</class>
+       
 
         <properties>
             <!-- Solo propiedades NO sensibles. La conexión viene desde db.properties vía JPAUtil -->
