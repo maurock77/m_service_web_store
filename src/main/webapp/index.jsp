@@ -35,14 +35,14 @@
 
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Cursos</a>
+                                <a class="nav-link active" aria-current="page" href="cursos.jsp">Cursos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="miPerfil.jsp">Mi perfil</a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="#">Contacto</a>
-                            </li>
+                            </li> -->
                         </ul>
                         <form class="d-flex" role="search">
                             <input class="form-control me-2" type="search" placeholder="Buscar curso" aria-label="Search"/>
