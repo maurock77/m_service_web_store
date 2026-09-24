@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author mauricio
  */
-@WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
+@WebServlet(name = "UsuarioServlet", urlPatterns = {"/usuario"})
 public class UsuarioServlet extends HttpServlet {
     
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -62,6 +62,8 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        System.out.println("========== INICIO UsuarioServlet ==========");
         
         String idParam = request.getParameter("id");
         System.out.println(">>> idParam es null o vacío, enviando 400");
