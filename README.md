@@ -1,1 +1,2 @@
-# m_service_web_store
+## versión de Java
+- Este proyecto utiliza **OpenJdk 21**.
